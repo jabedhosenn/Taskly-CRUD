@@ -16,7 +16,7 @@
                     <th>Title</th>
                     <th>Description</th>
                     <th>Status</th>
-                    <th>Name</th>
+                    <th>Assigned By</th>
                     <th>Image</th>
                     <th>Actions</th>
                 </tr>
@@ -29,15 +29,20 @@
                         <td>{{ $task->description }}</td>
                         <td>{{ $task->status }}</td>
                         <td>{{ $task->name }}</td>
-                        <td>IMAGE</td>
-                        <td>ACTIONS</td>
+                        <td>
+                            @if ($task->image)
+                                <img src="{{ asset('storage/' . $task->image) }}" alt="Task Image" width="100">
+                            @else
+                                No Image
+                            @endif
+                        </td>
                         <td>
                             <a href="" class="btn btn-sm btn-info">Edit</a>
-                            <form action="" method="POST" style="display:inline;">
+                            {{-- <form action="" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                            </form>
+                            </form> --}}
                         </td>
                     </tr>
                 @endforeach
@@ -68,21 +73,7 @@
             @endforeach --}}
 
             </tbody>
+        </table>
+        {{ $tasks->links('pagination::bootstrap-5') }}
     </div>
 @endsection
-{{-- {{ route('tasks.create') }} --}}
-{{-- @foreach ($tasks as $task)
-            <tr>
-                <td>{{ $task->id }}</td>
-                <td>{{ $task->title }}</td>
-                <td>{{ $task->description }}</td>
-                <td>
-                    <a href="" class="btn btn-sm btn-info">Edit</a>
-                    <form action="" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach --}}

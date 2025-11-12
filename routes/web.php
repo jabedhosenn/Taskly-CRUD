@@ -6,7 +6,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\AboutController;
 
 
-Route::get('/', [HomeController::class, 'home']);
+Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/tasks/view', [TaskController::class, 'index'])->name('tasks.index');
 Route::get('/tasks/about', [AboutController::class, 'about'])->name('tasks.about');
 Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.createtask');

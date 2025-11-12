@@ -10,7 +10,10 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = DB::table('tasks')->get();
+        $tasks = DB::table('tasks')
+        ->orderBy('id', 'desc')
+        ->paginate(5);
+
         return view('tasks.index', ['tasks' => $tasks]);
     }
 
@@ -26,11 +29,18 @@ class TaskController extends Controller
         $status = $request->status;
         $name = $request->name;
 
+        $image = $request->hasFile('image');
+        $imagePath = null;
+        if ($image) {
+            $imagePath = $request->file('image')->store('task_images', 'public');
+        }
+
         DB::table('tasks')->insert([
             'title' => $title,
             'description' => $description,
             'status' => $status,
             'name' => $name,
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('tasks.createtask')->with('success', 'Task created successfully.');
