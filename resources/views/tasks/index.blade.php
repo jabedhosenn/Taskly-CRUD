@@ -37,12 +37,15 @@
                             @endif
                         </td>
                         <td>
-                            <a href="" class="btn btn-sm btn-info">Edit</a>
-                            {{-- <form action="" method="POST" style="display:inline;">
+                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-info">Edit</a>
+                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="d-inline"
+                                onsubmit="return confirm('Are you sure you want to delete this task?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                            </form> --}}
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

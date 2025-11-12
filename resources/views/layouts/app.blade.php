@@ -45,6 +45,7 @@
         @yield('tasks-content')
         @yield('about-content')
         @yield('add-task')
+        @yield('edit-task')
     </main>
 
     <!-- Footer -->

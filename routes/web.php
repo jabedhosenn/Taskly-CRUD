@@ -11,3 +11,6 @@ Route::get('/tasks/view', [TaskController::class, 'index'])->name('tasks.index')
 Route::get('/tasks/about', [AboutController::class, 'about'])->name('tasks.about');
 Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.createtask');
 Route::post('/tasks/store', [TaskController::class, 'store'])->name('tasks.store');
+Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+Route::post('/tasks/{id}/update', [TaskController::class, 'update'])->name('tasks.update');
+Route::delete('/tasks/{id}/delete', [TaskController::class, 'destroy'])->name('tasks.destroy');
