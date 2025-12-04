@@ -1,7 +1,14 @@
 @extends('layouts.app')
 
 @section('tasks-content')
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <div class="d-flex justify-content-between">
+
         <h2>Your Tasks</h2>
         <div>
             <a href="{{ route('tasks.createtask') }}" class="btn btn-primary">Create New Task</a>

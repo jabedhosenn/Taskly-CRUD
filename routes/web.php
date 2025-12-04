@@ -14,3 +14,7 @@ Route::post('/tasks/store', [TaskController::class, 'store'])->name('tasks.store
 Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
 Route::post('/tasks/{id}/update', [TaskController::class, 'update'])->name('tasks.update');
 Route::delete('/tasks/{id}/delete', [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+// Eloquent ORM route
+Route::get('/getTask', [App\Http\Controllers\TestController::class, 'getTask']);
+Route::get('/orderItem', [App\Http\Controllers\TestController::class, 'orderItem']);
