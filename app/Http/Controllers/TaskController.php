@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EditTaskRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Task;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreTaskRequest;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
@@ -27,54 +31,49 @@ class TaskController extends Controller
         return view('tasks.createtask');
     }
 
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
-        $title = $request->title;
-        $description = $request->description;
-        $status = $request->status;
-        $name = $request->name;
+        // $title = $request->title;
+        // $description = $request->description;
+        // $status = $request->status;
+        // $name = $request->name;
 
-        $image = $request->hasFile('image');
-        $imagePath = null;
-        if ($image) {
-            $imagePath = $request->file('image')->store('task_images', 'public');
-        }
-
-        // DB::table('tasks')->insert([
-        //     'title' => $title,
-        //     'description' => $description,
-        //     'status' => $status,
-        //     'name' => $name,
-        //     'image' => $imagePath,
-        //     'created_at' => now(),
-        //     'updated_at' => now(),
+        // $validatedData = $request->validate([
+        //     'title' => ['required', 'string', 'max:255'],
+        //     'description' => ['required', 'string', 'min:10', 'max:500'],
+        //     'status' => ['required', 'string', 'max:50'],
+        //     'name' => ['required', 'string', 'max:100'],
+        //     'image' => ['nullable','image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         // ]);
 
-        // Using Eloquent ORM
-        // $task = new Task();
-        // $task->title = $title;
-        // $task->description = $description;
-        // $task->status = $status;
-        // $task->name = $name;
-        // $task->image = $imagePath;
-        // $task->save();
+        $validatedData = $request->validated();
+        try {
+            $image = $request->hasFile('image');
+            $imagePath = null;
+            if ($image) {
+                $imagePath = $request->file('image')->store('task_images', 'public');
+            }
+            // Using Eloquent ORM
+            $task = new Task();
+            $task->title = $validatedData['title'];
+            $task->description = $validatedData['description'];
+            $task->status = $validatedData['status'];
+            $task->name = $validatedData['name'];
+            $task->image = $imagePath;
+            $task->save();
 
-        // Mass Assignment
-        /*
-        Task::create([
-            'title' => $title,
-            'description' => $description,
-            'status' => $status,
-            'name' => $name,
-            'image' => $imagePath,
-        ]); // more secure way to allow mass assignment. best practice
-        */
+            Log::channel('daily')->info('Task created: ', [
+                'id' => $task->id,
+                'title' => $task->title
+            ]);
 
-        $data = $request->all();
-        $data['image'] = $imagePath;
-
-        Task::create($data);
-        return redirect()->route('tasks.createtask')->with('success', 'Task created successfully.');
+            return redirect()->route('tasks.createtask')->with('success', 'Task created successfully.');
+        } catch (Exception $e) {
+            Log::channel('daily')->error('Error creating task: ', [
+                'error' => $e->getMessage()
+            ]);
+            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function edit($id)
@@ -87,12 +86,22 @@ class TaskController extends Controller
         return view('tasks.edit', ['task' => $task]);
     }
 
-    public function update(Request $request, $id)
+    public function update(EditTaskRequest $request, $id)
     {
-        $title = $request->title;
-        $description = $request->description;
-        $status = $request->status;
-        $name = $request->name;
+        // $title = $request->title;
+        // $description = $request->description;
+        // $status = $request->status;
+        // $name = $request->name;
+
+        $validatedData = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'min:10', 'max:500'],
+            'status' => ['required', 'string', 'max:50'],
+            'name' => ['required', 'string', 'max:100'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+        ]);
+
+        $validatedData = $request->validated();
 
         $image = $request->hasFile('image');
         $imagePath = null;
@@ -126,15 +135,14 @@ class TaskController extends Controller
         // $task->save();
 
         Task::where('id', $id)->update(array_filter([
-            'title' => $title,
-            'description' => $description,
-            'status' => $status,
-            'name' => $name,
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'],
+            'status' => $validatedData['status'],
+            'name' => $validatedData['name'],
             'image' => $imagePath,
         ]));
 
         return redirect()->route('tasks.edit', $id)->with('success', 'Task updated successfully.');
-
     }
 
     public function destroy($id)

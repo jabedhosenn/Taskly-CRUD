@@ -23,35 +23,52 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="title" class="form-label fw-bold">Task Title</label>
-                                <input type="text" class="form-control" id="title" name="title"
-                                    placeholder="Enter task title" required>
+                                <input type="text" class="form-control @error('title') is-invalid @enderror"
+                                    id="title" name="title" placeholder="Enter task title"
+                                    value="{{ old('title') }}">
+                                @error('title')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="description" class="form-label fw-bold">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Describe your task"
-                                    required></textarea>
+                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                                    rows="4" placeholder="Describe your task" value="{{ old('description') }}"></textarea>
+                                @error('description')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="status" class="form-label fw-bold">Status</label>
-                                <select class="form-select" id="status" name="status" required>
+                                <select class="form-select @error('status') is-invalid @enderror" id="status" name="status">
                                     <option value="">-- Select Status --</option>
                                     <option value="pending">Pending</option>
                                     <option value="in_progress">In Progress</option>
                                     <option value="completed">Completed</option>
                                 </select>
+                                @error('status')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="name" class="form-label fw-bold">Assigned To</label>
-                                <input type="text" class="form-control" id="name" name="name"
-                                    placeholder="Enter person’s name" required>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                    id="name" name="name" placeholder="Enter person’s name"
+                                    value="{{ old('name') }}">
+                                @error('name')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="image" class="form-label fw-bold">Task Image (Optional)</label>
-                                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*" value="{{ old('image') }}">
+                                @error('image')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="d-grid">

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\AboutController;
-
+use App\Http\Controllers\TestController;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/tasks/view', [TaskController::class, 'index'])->name('tasks.index');
@@ -16,5 +16,5 @@ Route::post('/tasks/{id}/update', [TaskController::class, 'update'])->name('task
 Route::delete('/tasks/{id}/delete', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
 // Eloquent ORM route
-Route::get('/getTask', [App\Http\Controllers\TestController::class, 'getTask']);
-Route::get('/orderItem', [App\Http\Controllers\TestController::class, 'orderItem']);
+Route::get('/getTask', [TestController::class, 'getTask']);
+Route::get('/orderItem', [TestController::class, 'orderItem']);
